@@ -10,7 +10,7 @@ using UDEngine.Components.Collision;
 using UDEngine.Components.Pool;
 using UDEngine.Internal;
 
-namespace UDEngine.Components.Shoot {
+namespace UDEngine.Components.Shooter {
 	public class UShootManager : MonoBehaviour {
 
 		// Use this for initialization
