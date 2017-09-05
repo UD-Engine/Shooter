@@ -44,6 +44,11 @@ namespace UDEngine.Components.Shooter {
 		public bool IsComplete() {
 			return this._isComplete;
 		}
+
+		public IShootStage SetComplete(bool condition) {
+			_isComplete = condition;
+			return this;
+		}
 	}
 
 	/// <summary>
@@ -71,6 +76,11 @@ namespace UDEngine.Components.Shooter {
 				return true;
 			}
 			return _conditionPredicate ();
+		}
+
+		public IShootStage SetComplete(bool condition) {
+			UDebug.Warning("UShootStageWaitFor.SetComplete() is called, you may be doing something undesirable. UShootStageWaitFor() is NOT compatible with loop types (since you fed it a predicate)");
+			return this;
 		}
 	}
 
@@ -133,7 +143,10 @@ namespace UDEngine.Components.Shooter {
 						UBulletObject fetchedBullet = poolManager.FetchBulletByID (_bulletIndex, true, _shouldBulletAddToMonitor, _shouldBulletActivateCollider);
 						// rotate fetched bullet to have the same rotation as the shooter. 
 						// This is meaningful as we want bullets to shoot at the same UP direction of the shooter
-						fetchedBullet.GetTransform ().rotation = _shooter.GetTransform ().rotation;
+						Transform fetchedBulletTrans = fetchedBullet.GetTransform ();
+						Transform shooterTrans = _shooter.GetTransform ();
+						fetchedBulletTrans.position = shooterTrans.position;
+						fetchedBulletTrans.rotation = shooterTrans.rotation;
 						// More motion settings on the bullet itself
 						_bulletInitEvent.Invoke (fetchedBullet);
 
@@ -153,6 +166,11 @@ namespace UDEngine.Components.Shooter {
 
 		public bool IsComplete() {
 			return _isComplete;
+		}
+
+		public IShootStage SetComplete(bool condition) {
+			this._isComplete = condition;
+			return this;
 		}
 	}
 
@@ -178,11 +196,15 @@ namespace UDEngine.Components.Shooter {
 
 			_shouldBulletAddToMonitor = shouldBulletAddToMonitor;
 			_shouldBulletActivateCollider = shouldBulletActivateCollider;
+
+			_isForceStopped = false;
 		}
 
 		private float _interval;
 		private int _bulletIndex;
 		private UShooter _shooter;
+
+		private bool _isForceStopped = false; // when this is true, the infinite call is forcefully stopped
 
 		private bool _shouldBulletAddToMonitor;
 		private bool _shouldBulletActivateCollider;
@@ -202,10 +224,18 @@ namespace UDEngine.Components.Shooter {
 				if (_bulletIndex >= 0 && _bulletIndex < poolManager.GetPrototypesCount()) {
 					// Forever and infinite
 					while (true) {
+						// when this is true, the infinite call is forcefully stopped
+						if (_isForceStopped) {
+							break;
+						}
+
 						UBulletObject fetchedBullet = poolManager.FetchBulletByID (_bulletIndex, true, _shouldBulletAddToMonitor, _shouldBulletActivateCollider);
 						// rotate fetched bullet to have the same rotation as the shooter. 
 						// This is meaningful as we want bullets to shoot at the same UP direction of the shooter
-						fetchedBullet.GetTransform ().rotation = _shooter.GetTransform ().rotation;
+						Transform fetchedBulletTrans = fetchedBullet.GetTransform ();
+						Transform shooterTrans = _shooter.GetTransform ();
+						fetchedBulletTrans.position = shooterTrans.position;
+						fetchedBulletTrans.rotation = shooterTrans.rotation;
 						// More motion settings on the bullet itself
 						_bulletInitEvent.Invoke (fetchedBullet);
 
@@ -220,7 +250,13 @@ namespace UDEngine.Components.Shooter {
 		}
 
 		public bool IsComplete() {
-			return false;
+			return _isForceStopped;
+		}
+
+		// This can be used to forcefully stop the infinite state.
+		public IShootStage SetComplete(bool condition) {
+			this._isForceStopped = condition;
+			return this;
 		}
 	}
 }

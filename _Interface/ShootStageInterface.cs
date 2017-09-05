@@ -17,5 +17,8 @@ namespace UDEngine.Interface {
 		IEnumerator StartStage ();
 		// Polled condition to stall shooter going to the next stage
 		bool IsComplete ();
+		// Forcefully set complete or incomplete
+		// This is to fix the BAD loopType problem in UShooter
+		IShootStage SetComplete(bool condition);
 	}
 }
