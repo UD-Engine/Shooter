@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using UDEngine;
-using UDEngine.Components;
-using UDEngine.Components.Shooter;
+using UDEngine.Core;
+using UDEngine.Core.Shooter;
 
 namespace UDEngine.Interface {
 	/// <summary>

@@ -5,15 +5,15 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using UDEngine;
-using UDEngine.Components;
-using UDEngine.Components.Actor;
-using UDEngine.Components.Bullet;
-using UDEngine.Components.Collision;
-using UDEngine.Components.Pool;
-using UDEngine.Components.Shooter;
+using UDEngine.Core;
+using UDEngine.Core.Actor;
+using UDEngine.Core.Bullet;
+using UDEngine.Core.Collision;
+using UDEngine.Core.Pool;
+using UDEngine.Core.Shooter;
 using UDEngine.Internal;
 
-namespace UDEngine.Components.Shooter {
+namespace UDEngine.Core.Shooter {
 	/// <summary>
 	/// Shoot Actor. Function similar to that of UBulletActor or inside UBulletRegionTrigger
 	/// </summary>

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-using UDEngine.Components.Bullet;
+using UDEngine.Core.Bullet;
 
-namespace UDEngine.Components.Shooter {
+namespace UDEngine.Core.Shooter {
 	public class UShootEvent : UnityEvent<UBulletObject> {
 		// unabstract the class
 	}
